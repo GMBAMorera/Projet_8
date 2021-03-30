@@ -15,6 +15,7 @@ class Aliment(models.Model):
     ingredients = models.TextField()
     cat_name = models.ForeignKey(Category, on_delete=models.CASCADE)
     link = models.CharField(max_length=256)
+    image = models.CharField(max_length=256)
 
     def __str__(self):
         return self.name

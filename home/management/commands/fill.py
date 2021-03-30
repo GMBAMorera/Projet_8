@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from requests import get
 from home.models import Aliment, Category
 from home.management.commands.constants import (
@@ -48,7 +48,13 @@ class Command(BaseCommand):
                     print(CAT_FINDING_FAIL.format(counter, cat))
                     break
 
-                counter = self._try_aliment_list(imported_aliments, cat, counter)
+                for aliment in imported_aliments:
+                    if self._no_full_info(aliment):
+                        continue
+                    if self._redundant_info(aliment, cat):
+                        continue
+
+                    counter = self._save(aliment, cat, counter)
                 n_page += 1
 
             print(CAT_FINDING_SUCCESS.format(cat))
@@ -75,44 +81,39 @@ class Command(BaseCommand):
         """Check and save all data complete enough to be used
         on Pur Beurre, discarding them otherwise.
         """
-        for al in al_list:
+    def _no_full_info(self, aliment):
+        for field in PRODUCTS_FIELDS:
             try:
-                name, nut, ing, url = self._create_row(al)
+                aliment[field]
             except KeyError:
-                continue
+                return True
+        return False
 
-            if self._incorrect_product(name, cat, ing, url):
-                continue
+    def _save(self, aliment, category, counter):
+        new_aliment = Aliment(
+            name=aliment['product_name_fr'],
+            nutriscore=aliment['nutrition_grade_fr'],
+            ingredients = aliment['ingredients_text_fr'],
+            cat_name=Category.objects.get(name=category),
+            link= aliment['url'],
+            image = aliment['image_url']
+        )
+        new_aliment.save()
+        self.all_aliments = self._table_list(Aliment)
+        return counter + 1
 
-            counter += 1
-
-            new_aliment = Aliment(
-                name=name,
-                nutriscore=nut,
-                ingredients = ing,
-                cat_name=Category.objects.get(name=cat),
-                link=url
-            )
-            new_aliment.save()
-            self.all_aliments = self._table_list(Aliment)
-        return counter
-
-    def _incorrect_product(self, name, cat, ing, url):
+    def _redundant_info(self, aliment, category):
+        name = aliment['product_name_fr']
+        ingredient = aliment['ingredients_text_fr']
+        url = aliment['url']
+        img = aliment['image_url']
         if (
-            name == cat 
+            name == category
             or name in self.all_aliments
-            or ing == ''
+            or ingredient == ''
             or len(name) > 255
             or len(url) > 255
+            or len(img) > 255
         ):
             return True
         return False
-
-    def _create_row(self, al):
-        """ Format data along a VALUE mysql instruction."""
-        return (
-            al['product_name_fr'],
-            al['nutrition_grade_fr'],
-            al['ingredients_text_fr'],
-            al['url']
-        )

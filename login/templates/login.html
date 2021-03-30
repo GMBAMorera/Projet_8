@@ -1,0 +1,34 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block extra-css %}
+<link href="{% static 'css/extra-login.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+        <!-- Masthead-->
+        <header class="masthead" id="login-masthead">
+            <div class="container h-100">
+                <div class="row h-100 align-items-center justify-content-center text-center">
+                    <div class="col-lg-10 align-self-end">
+                        <h2 class="text-uppercase text-white font-weight-bold">Connectez-vous afin de conserver les substituts de votre choix.</h1>
+                        <hr class="divider my-4" />
+                    </div>
+                    <div class="col-lg-8 align-self-baseline">
+                        {% if incomplete_login %}
+                        <p class="text-white-75 font-weight-light mb-5">Les informations que vous nous avez fournis ne correspondent à aucun compte.</p>
+                        {% endif %}
+                        <form class="form-inline my-2 my-lg-0" id="Search" method="post" action="account">
+                            {% csrf_token %}
+                            <ul class="list">
+                                <li><input class="form-control text-input" type="text" placeholder="username" aria-label="username" name="username"></li>
+                                <li><input class="form-control text-input" type="text" placeholder="email (only for sign-in)" aria-label="email" name="email"></li>
+                                <li><input class="form-control text-input" type="text" placeholder="password" aria-label="password" name="password"></li>
+                                <li><input type="submit"></li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </header>
+{% endblock %}

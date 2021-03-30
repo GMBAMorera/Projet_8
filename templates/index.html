@@ -19,12 +19,14 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+        {% block extra-css %}
+        {% endblock %}
     </head>
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
             <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="{% static 'assets/img/logo.svg' %}">Pur Beurre</a>
+                <a class="navbar-brand js-scroll-trigger" href="home"><img src="{% static 'assets/img/logo.svg' %}" id="logo">Pur Beurre</a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
@@ -33,9 +35,9 @@
                                 <input class="form-control mr-sm-2" type="search" placeholder="Chercher" aria-label="Chercher">
                             </form>
                         </li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#"><i class="far fa-user"></i></a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#"><img src="{% static 'assets/img/carrot.png' %}" alt="Mes aliments"></a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#"><i class="fas fa-sign-out-alt"></i></a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="account"><i class="far fa-user"></i></a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="home" id="favorites"><i class="fas fa-carrot"></i></a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="login"><i class="fas fa-sign-out-alt"></i></a></li>
                     </ul>
                 </div>
             </div>

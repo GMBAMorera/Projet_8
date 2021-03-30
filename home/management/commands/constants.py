@@ -8,7 +8,8 @@ PRODUCTS_FIELDS = [
     "product_name_fr",
     "nutrition_grade_fr",
     "ingredients_text_fr",
-    "url"
+    "url",
+    "image_url"
 ]
 CATEGORIES = [
     "pizzas",
