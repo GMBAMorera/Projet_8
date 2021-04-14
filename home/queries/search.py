@@ -1,12 +1,12 @@
 from home.models import Aliment, Category, Substitution
 from login.models import User
-
+from urllib.parse import quote_plus
+from home.constants import MAX_SUBSTITUTES
 
 
 class Search:
     """ Results of a customer' search of substitute inside the database."""
 
-    MAX_SUBSTITUTES = 6
     def __init__(self, form, user):
         print(form)
         self.keywords = self.extract_keywords(form)
@@ -16,6 +16,8 @@ class Search:
         self.substitutes = self.choose_substitutes()
 
         self.are_saved = self.check_saved(user)
+
+        self.all_url = self.build_all_url()
 
     def extract_keywords(self, form):
         return form.split()
@@ -42,7 +44,7 @@ class Search:
         if self.matching_query is not None:
             return self._choose_substitutes()
         else:
-            return None
+            return []
 
     def _choose_substitutes(self):
         all_substitute = Aliment.objects.filter(
@@ -51,13 +53,13 @@ class Search:
             nutriscore__lt=self.matching_query.nutriscore
         )
         all_substitute = all_substitute.order_by('nutriscore')
-        return list(all_substitute)[:self.MAX_SUBSTITUTES]
+        return list(all_substitute)[:MAX_SUBSTITUTES]
 
     def check_saved(self, user):
         if user.is_authenticated:
             return self._check_saved(user)
         else:
-            return None
+            return []
 
     def _check_saved(self, user):
         all_check = []
@@ -66,3 +68,7 @@ class Search:
                 user=user, substitute=subst, original=self.matching_query
             ).exists()
             all_check.append(is_subst)
+        return all_check
+
+    def build_all_url(self):
+        return [quote_plus(subst.name) for subst in self.substitutes]

@@ -7,5 +7,6 @@
 }
 
 #login-masthead{
-  height: 150px;
+  height: 400px;
+  min-height: 0;
 }

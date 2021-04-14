@@ -15,18 +15,19 @@
                     <hr class="divider my-4" />
                 </div>
                 <div class="col-lg-8 align-self-baseline">
-                    {% if incomplete_login %}
-                    <p class="text-white-75 font-weight-light mb-5">Les informations que vous nous avez fournis ne correspondent à aucun compte.</p>
+                    {% if incomplete_inscription %}
+                        <p class="text-white-75 font-weight-light mb-5">Merci de bien vouloir remplir tous les champs.</p>
                     {% endif %}
-                    <form class="form-inline my-2 my-lg-0" id="Search" method="post" action="login">
+                    <form class="form-inline my-2 my-lg-0" id="Search" method="post" action="inscription">
                         {% csrf_token %}
                         <ul class="list">
                             <li><input class="form-control text-input" type="text" placeholder="username" aria-label="username" name="username"></li>
+                            <li><input class="form-control text-input" type="email" placeholder="email" aria-label="email" name="email"></li>
                             <li><input class="form-control text-input" type="password" placeholder="password" aria-label="password" name="password"></li>
                             <li><input type="submit"></li>
                         </ul>
                     </form>
-                    <a href="inscription">Pas encore inscrit?</a>
+                    <a href="login">Déjà inscrit?</a>
                 </div>
             </div>
         </div>

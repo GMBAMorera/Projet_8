@@ -5,15 +5,28 @@ from login.models import User
 from home.models import Substitution
 
 def account(request):
+    if request.user.is_authenticated:
+        return render(request, 'account.html', {'user': request.user})
+    else:
+        return redirect('home')
+
+def login_page(request):
     if request.method == 'POST':
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
         if user is not None:
             login(request, user)
-            return render(request, 'account.html', {
-                'first_login': False,
-                'user': user
-            })
-        elif (
+            return redirect('account')
+        else:
+            return render(request, 'login.html', {'incomplete_login': True})
+    elif request.user.is_authenticated:
+        logout(request)
+        return redirect('home')
+    else:
+        return render(request, 'login.html', {'incomplete_login': False})
+
+def inscription(request):
+    if request.method == 'POST':
+        if (
             request.POST['username'] != ''
             and request.POST['email'] != ''
             and request.POST['password'] != ''
@@ -22,24 +35,7 @@ def account(request):
             user.save()
             user = authenticate(username=request.POST['username'], password=request.POST['password'])
             login(request, user)
-            return render(request, 'account.html', {
-                'first_login': True,
-                'user': user
-            })
+            return redirect('account')
         else:
-            return render(request, 'login.html', {'incomplete_login': True})
-    else:
-        if request.user.is_authenticated:
-            return render(request, 'account.html', {
-                'first_login': False,
-                'user': request.user
-            })
-        else:
-            return redirect('home')
-
-def login_page(request):
-    if request.user.is_authenticated:
-        logout(request)
-        return redirect('home')
-    else:
-        return render(request, 'login.html', {'incomplete_login': False})
+            return render(request, 'inscription.html', {"incomplete_inscription": True})
+    return render(request, 'inscription.html', {"incomplete_inscription": False})

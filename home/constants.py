@@ -1,3 +1,6 @@
+
+### FILL COMMAND CONNSTANTS ###
+
 MAX_PRODUCTS_KEEPED = 50
 PAGE_SIZE = 60
 CAT_SEARCH = "{} is being filled"
@@ -18,3 +21,7 @@ CATEGORIES = [
     "pates-a-tartiner",
     "cereales-pour-petit-déjeuner"
 ]
+
+
+### SEARCH QUERY CONSTANT ###
+MAX_SUBSTITUTES = 6

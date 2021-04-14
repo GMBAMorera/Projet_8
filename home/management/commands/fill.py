@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from requests import get
 from home.models import Aliment, Category
-from home.management.commands.constants import (
+from home.constants import (
     MAX_PRODUCTS_KEEPED, CAT_FINDING_FAIL, CAT_FINDING_SUCCESS,
     OFF_URL, PRODUCTS_FIELDS, CATEGORIES, CAT_SEARCH, PAGE_SIZE
 )
@@ -14,25 +14,25 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.all_aliments = self._table_list(Aliment)
-
         self.all_categories = self._table_list(Category)
         self._verify_basic_categories()
 
         self.add_aliments()
 
     def _table_list(self, Table):
-        """ return a list of row names inside a table.
-        Should only be used with Aliment of Category table.
-        """
+        """ return a list of row names inside a table."""
         return [a.name for a in Table.objects.all()]
 
     def _verify_basic_categories(self):
         """ Verify if all basic categories are inside the Category table."""
         for cat in CATEGORIES:
             if cat not in self.all_categories:
-                new_cat = Category(name=cat)
-                new_cat.save()
+                self.add_category(cat)
         self.all_categories = self._table_list(Category)
+
+    def add_category(self, cat):
+        new_cat = Category(name=cat)
+        new_cat.save()
 
     def add_aliments(self):
         """ Find enough data inside OpenFoodFact API
@@ -60,7 +60,7 @@ class Command(BaseCommand):
             print(CAT_FINDING_SUCCESS.format(cat))
 
     def _scratch_category(self, cat, n_page):
-        """Extract one page of data of the API."""
+        """Extract one API's page of data."""
         payload = {
             "action": "process",
             "tagtype_0": "categories",
@@ -77,10 +77,6 @@ class Command(BaseCommand):
         al_list = get(OFF_URL, params=payload).json()
         return al_list["products"]
 
-    def _try_aliment_list(self, al_list, cat, counter):
-        """Check and save all data complete enough to be used
-        on Pur Beurre, discarding them otherwise.
-        """
     def _no_full_info(self, aliment):
         for field in PRODUCTS_FIELDS:
             try:
@@ -88,19 +84,6 @@ class Command(BaseCommand):
             except KeyError:
                 return True
         return False
-
-    def _save(self, aliment, category, counter):
-        new_aliment = Aliment(
-            name=aliment['product_name_fr'],
-            nutriscore=aliment['nutrition_grade_fr'],
-            ingredients = aliment['ingredients_text_fr'],
-            cat_name=Category.objects.get(name=category),
-            link= aliment['url'],
-            image = aliment['image_url']
-        )
-        new_aliment.save()
-        self.all_aliments = self._table_list(Aliment)
-        return counter + 1
 
     def _redundant_info(self, aliment, category):
         name = aliment['product_name_fr']
@@ -117,3 +100,16 @@ class Command(BaseCommand):
         ):
             return True
         return False
+
+    def _save(self, aliment, category, counter):
+        new_aliment = Aliment(
+            name=aliment['product_name_fr'],
+            nutriscore=aliment['nutrition_grade_fr'],
+            ingredients = aliment['ingredients_text_fr'],
+            cat_name=Category.objects.get(name=category),
+            link= aliment['url'],
+            image = aliment['image_url']
+        )
+        new_aliment.save()
+        self.all_aliments = self._table_list(Aliment)
+        return counter + 1

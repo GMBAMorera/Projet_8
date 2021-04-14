@@ -7,49 +7,54 @@
 
 
 {% block content %}
-        <!-- Masthead-->
-        <header class="aliment-masthead" >
-            <div class="container h-100">
-                <div class="row h-100 align-items-center justify-content-center text-center">
-                    <div class="col-lg-10 align-self-end">
-                        <h1 class="text-uppercase text-white font-weight-bold">{{aliment.name}}</h1>
-                        <hr class="divider my-4" />
-                    </div>
-                    <div class="col-lg-8 align-self-baseline">
-                        <p class="text-white-75 font-weight-light mb-5">Catégorie: {{aliment.category.name}}</p>
-                    </div>
+    <!-- Masthead-->
+    <header id="aliment-masthead" style="background-image: url('{{aliment.image}}');">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center justify-content-center text-center">
+                <div class="col-lg-10 align-self-end">
+                    <h1 class="text-uppercase text-white font-weight-bold">{{aliment.name}}</h1>
+                    <hr class="divider my-4" />
+                </div>
+                <div class="col-lg-8 align-self-baseline">
+                    <h3 class="text-white-75 font-weight-light mb-5">Catégorie: {{aliment.cat_name}}</p>
                 </div>
             </div>
-        </header>
-        <!-- Introduction-->
-        <section class="page-section" id="intro">
-            <div class="container">
-                <h2 class="text-center mt-0">Vous pouvez remplacer cet aliment par:</h2>
-                <hr class="divider my-4" />
-                <div class="row">
-                    {% for substitute, is_subst in results %}
+        </div>
+    </header>
+    <!-- Introduction-->
+    <section class="page-section" id="intro">
+        <div class="container">
+            <h2 class="text-center mt-0">Vous pouvez remplacer cet aliment par:</h2>
+            <hr class="divider my-4" />
+            <div class="row">
+                {% for substitute, is_subst, url_subst in results %}
+                    <div class = "col-12 col-sm-6 col-md-4">
                         <div class="card">
                             <div class="card-body">
-                                <img class="card-img-top" src="{{substitute.image}}" alt="{{substitute.name}}">
+                                <a href="aliment/{{url_subst}}"><img class="card-img-top" src="{{substitute.image}}" alt="{{substitute.name}}"></a>
                                 <h5 class="card-title">{{substitute.name}}</h5>
                             </div>
                             {% if not is_subst%}
                                 <div class="card-footer">
                                     <form id="select" method="POST" action="select">
-                                        <input type="hidden" name="">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="select" value="{{user.id}}-{{substitute.id}}-{{aliment.id}}">
                                         <input type="submit" value="sélectionner">
                                     </form>
                                 </div>
                             {% else %}
-                            <div class="card-footer">
-                                <form id="unselect" method="POST" action="unselect">
-                                    <input type="submit" value="désélectionner">
-                                </form>
-                            </div>
+                                <div class="card-footer">
+                                    <form id="unselect" method="POST" action="unselect">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="unselect" value="{{user.id}}-{{substitute.id}}-{{aliment.id}}">
+                                        <input type="submit" value="désélectionner">
+                                    </form>
+                                </div>
                             {% endif %}
                         </div>
-                    {% endfor %}
-                </div>
+                    </div> 
+                {% endfor %}
             </div>
-        </section>
+        </div>
+    </section>
 {% endblock %}
