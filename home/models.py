@@ -10,12 +10,12 @@ class Category(models.Model):
 
 
 class Aliment(models.Model):
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=255)
     nutriscore = models.CharField(max_length=1)
     ingredients = models.TextField()
-    cat_name = models.ForeignKey(Category, on_delete=models.CASCADE)
-    link = models.CharField(max_length=256)
-    image = models.CharField(max_length=256)
+    cat_name = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='cat_name')
+    link = models.CharField(max_length=255)
+    image = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name

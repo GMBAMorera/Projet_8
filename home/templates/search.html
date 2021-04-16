@@ -34,12 +34,19 @@
                                 <a href="aliment/{{url_subst}}"><img class="card-img-top" src="{{substitute.image}}" alt="{{substitute.name}}"></a>
                                 <h5 class="card-title">{{substitute.name}}</h5>
                             </div>
-                            {% if not is_subst%}
+                            {% if is_subst is None %}
+                                <div class="card-footer">
+                                    <form action="login">
+                                        {% csrf_token %}
+                                        <input type="submit" value="connectez-vous" class="login">
+                                    </form>
+                                </div>
+                            {% elif not is_subst%}
                                 <div class="card-footer">
                                     <form id="select" method="POST" action="select">
                                         {% csrf_token %}
                                         <input type="hidden" name="select" value="{{user.id}}-{{substitute.id}}-{{aliment.id}}">
-                                        <input type="submit" value="sélectionner">
+                                        <input type="submit" value="sélectionner" class="select-submit">
                                     </form>
                                 </div>
                             {% else %}
@@ -47,7 +54,7 @@
                                     <form id="unselect" method="POST" action="unselect">
                                         {% csrf_token %}
                                         <input type="hidden" name="unselect" value="{{user.id}}-{{substitute.id}}-{{aliment.id}}">
-                                        <input type="submit" value="désélectionner">
+                                        <input type="submit" value="désélectionner" class="unselect-submit">
                                     </form>
                                 </div>
                             {% endif %}

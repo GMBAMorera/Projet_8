@@ -23,8 +23,10 @@ class Command(BaseCommand):
         """ return a list of row names inside a table."""
         return [a.name for a in Table.objects.all()]
 
-    def _verify_basic_categories(self):
+    def _verify_basic_categories(self, test=None):
         """ Verify if all basic categories are inside the Category table."""
+        if test is not None:
+            self.all_categories = test
         for cat in CATEGORIES:
             if cat not in self.all_categories:
                 self.add_category(cat)
@@ -85,7 +87,9 @@ class Command(BaseCommand):
                 return True
         return False
 
-    def _redundant_info(self, aliment, category):
+    def _redundant_info(self, aliment, category, test=None):
+        if test is not None:
+            self.all_aliments = test
         name = aliment['product_name_fr']
         ingredient = aliment['ingredients_text_fr']
         url = aliment['url']

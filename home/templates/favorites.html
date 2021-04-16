@@ -28,13 +28,13 @@
                     <div class = "col-12 col-sm-6 col-md-4">
                         <div class="card">
                             <div class="card-body">
-                                <a href="aliment/{{url}}"><img class="card-img-top" src="{{fav.image}}" alt="{{fav.name}}"></a>
-                                <h5 class="card-title">{{fav.name}}</h5>
+                                <a href="aliment/{{url}}"><img class="card-img-top" src="{{fav.substitute.image}}" alt="{{fav.substitute.name}}"></a>
+                                <h5 class="card-title">{{fav.subtitute.name}}</h5>
                             </div>
                             <div class="card-footer">
                                 <form id="unselect" method="POST" action="unselect">
                                     {% csrf_token %}
-                                    <input type="hidden" name="unselect" value="{{fav.id}}">
+                                    <input type="hidden" name="unselect" value="{{fav.id}}" class="unselect">
                                     <input type="submit" value="désélectionner">
                                 </form>
                             </div>

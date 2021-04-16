@@ -8,7 +8,6 @@ class Search:
     """ Results of a customer' search of substitute inside the database."""
 
     def __init__(self, form, user):
-        print(form)
         self.keywords = self.extract_keywords(form)
 
         self.matching_query = self.get_aliment()
@@ -56,10 +55,10 @@ class Search:
         return list(all_substitute)[:MAX_SUBSTITUTES]
 
     def check_saved(self, user):
-        if user.is_authenticated:
+        if user.is_authenticated and self.matching_query is not None:
             return self._check_saved(user)
         else:
-            return []
+            return [None]*len(self.substitutes)
 
     def _check_saved(self, user):
         all_check = []

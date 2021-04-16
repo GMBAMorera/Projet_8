@@ -15,7 +15,7 @@ from urllib.parse import quote_plus
 
 class QueryTestCase(TestCase):
     def setUp(self):
-        self.user_test = User.objects.create(username="user_test", email="email_test", password="pasword_test")
+        self.user_test = User.objects.create_user(username="user_test", email="email_test", password="pasword_test")
         self.user_test.save()
         self.client = Client()
 
@@ -60,15 +60,14 @@ class QueryTestCase(TestCase):
         assert substitutes == []
 
     def test_substitutes_2(self):
-        assert self.match.matching_query in self.match.substitutes
+        assert self.substitut_test in self.match.substitutes
 
     def test_check_saved_1(self):
-        assert self.match.are_saved == []
+        assert self.match.are_saved == [False]
 
     def test_check_saved_2(self):
         self.client.login(username=self.user_test.username, password=self.user_test.password)
-        all_check = self.match.check_saved(self.user_test)
-        assert all_check == [False]
+        assert self.match.check_saved(self.user_test) == [False]
 
     def test_check_saved_3(self):
         self.subst_test = Substitution.objects.create(user=self.user_test, substitute=self.substitut_test, original=self.aliment_test)
@@ -85,16 +84,17 @@ class QueryTestCase(TestCase):
         assert test.split('-') == Select(test)._scrap(test)
 
     def test_find(self):
-        assert self.aliment_test == Select('abc')._find(self.aliment_test.id, Aliment)
+        test = "test1-test2-test3"
+        assert self.aliment_test == Select(test)._find(self.aliment_test.id, Aliment)
 
     def test_select(self):
         test = Select(f'{self.user_test.id}-{self.substitut_test.id}-{self.aliment_test.id}')
         test.select()
-        assert Substitution.objects.filter(self.user, self.substitut_test, self.aliment_test).exists()
+        assert Substitution.objects.filter(user=self.user_test, substitute=self.substitut_test, original=self.aliment_test).exists()
 
     def test_delete(self):
         self.subst_test = Substitution.objects.create(user=self.user_test, substitute=self.substitut_test, original=self.aliment_test)
         self.subst_test.save()
         test = Select(f'{self.subst_test.id}')
         test.delete()
-        assert not Substitution.objects.filter(self.user, self.substitut_test, self.aliment_test).exists()
+        assert not Substitution.objects.filter(user=self.user_test, substitute=self.substitut_test, original=self.aliment_test).exists()

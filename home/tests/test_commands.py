@@ -4,7 +4,7 @@ from home.models import Substitution, Aliment, Category
 from login.models import User
 
 from home.management.commands import fill
-from home.constatns import CATEGORIES
+from home.constants import CATEGORIES
 
 # Create your tests here.
 
@@ -35,14 +35,14 @@ class QueryTestCase(TestCase):
         assert test_add.exists()
 
     def test_verify_basic_categories(self):
-        fill.Command()._verify_basic_categories()
+        fill.Command()._verify_basic_categories(test=[])
         test_verify = Category.objects.filter(name="pizzas")
         assert test_verify.exists()
 
     def test_no_full_info_1(self):
         aliment = {
             "product_name_fr": 'test',
-            "nutrition_grade_fr": 'test',
+            "nutrition_grade_fr": 't',
             "ingredients_text_fr": 'test',
             "url": 'test',
             "image_url": 'test'
@@ -51,7 +51,7 @@ class QueryTestCase(TestCase):
 
     def test_no_full_info_2(self):
         aliment = {
-            "nutrition_grade_fr": 'test',
+            "nutrition_grade_fr": 't',
             "ingredients_text_fr": 'test',
             "url": 'test',
             "image_url": 'test'
@@ -70,7 +70,7 @@ class QueryTestCase(TestCase):
     def test_no_full_info_4(self):
         aliment = {
             "product_name_fr": 'test',
-            "nutrition_grade_fr": 'test',
+            "nutrition_grade_fr": 't',
             "url": 'test',
             "image_url": 'test'
         }
@@ -79,7 +79,7 @@ class QueryTestCase(TestCase):
     def test_no_full_info_5(self):
         aliment = {
             "product_name_fr": 'test',
-            "nutrition_grade_fr": 'test',
+            "nutrition_grade_fr": 't',
             "ingredients_text_fr": 'test',
             "image_url": 'test'
         }
@@ -88,7 +88,7 @@ class QueryTestCase(TestCase):
     def test_no_full_info_6(self):
         aliment = {
         "product_name_fr": 'test',
-        "nutrition_grade_fr": 'test',
+        "nutrition_grade_fr": 't',
         "ingredients_text_fr": 'test',
         "url": 'test',
         }
@@ -98,45 +98,45 @@ class QueryTestCase(TestCase):
         category = 'test'
         aliment = {
             "product_name_fr": 'test',
-            "nutrition_grade_fr": 'test',
+            "nutrition_grade_fr": 't',
             "ingredients_text_fr": 'test',
             "url": 'test',
             "image_url": 'test'
         }
-        assert fill.Command()._redundant_info(aliment, category) == True
+        assert fill.Command()._redundant_info(aliment, category, test=[]) == True
 
     def test_redundant_info_2(self):
         category = 'test'
         aliment = {
             "product_name_fr": 'another_test'*255,
-            "nutrition_grade_fr": 'test',
+            "nutrition_grade_fr": 't',
             "ingredients_text_fr": 'test',
             "url": 'test',
             "image_url": 'test'
         }
-        assert fill.Command()._redundant_info(aliment, category) == True
+        assert fill.Command()._redundant_info(aliment, category, test=[]) == True
 
     def test_redundant_info_3(self):
         category = 'test'
         aliment = {
             "product_name_fr": 'another_test',
-            "nutrition_grade_fr": 'test',
+            "nutrition_grade_fr": 't',
             "ingredients_text_fr": 'test',
             "url": 'test'*255,
             "image_url": 'test'
         }
-        assert fill.Command()._redundant_info(aliment, category) == True
+        assert fill.Command()._redundant_info(aliment, category, test=[]) == True
 
     def test_redundant_info_4(self):
         category = 'test'
         aliment = {
             "product_name_fr": 'another_test',
-            "nutrition_grade_fr": 'test',
+            "nutrition_grade_fr": 't',
             "ingredients_text_fr": 'test',
             "url": 'test',
             "image_url": 'test'*255
         }
-        assert fill.Command()._redundant_info(aliment, category) == True
+        assert fill.Command()._redundant_info(aliment, category, test=[]) == True
 
     def test_redundant_info_5(self):
         al = Aliment.objects.create(name='another_test', nutriscore='f', cat_name=self.cat_test, link='', image='')
@@ -144,29 +144,29 @@ class QueryTestCase(TestCase):
         category = 'test'
         aliment = {
             "product_name_fr": 'another_test',
-            "nutrition_grade_fr": 'test',
+            "nutrition_grade_fr": 't',
             "ingredients_text_fr": '',
             "url": 'test',
             "image_url": 'test'
         }
-        assert fill.Command()._redundant_info(aliment, category) == True
+        assert fill.Command()._redundant_info(aliment, category, test=[]) == True
 
     def test_redundant_info_6(self):
         category = 'test'
         aliment = {
             "product_name_fr": 'another_test',
-            "nutrition_grade_fr": 'test',
+            "nutrition_grade_fr": 't',
             "ingredients_text_fr": 'test',
             "url": 'test',
             "image_url": 'test'
         }
-        assert fill.Command()._redundant_info(aliment, category) == False
+        assert fill.Command()._redundant_info(aliment, category, test=[]) == False
 
     def test_save_1(self):
-        category = 'user_test'
+        category = 'cat_test'
         aliment = {
             "product_name_fr": 'another_test',
-            "nutrition_grade_fr": 'test',
+            "nutrition_grade_fr": 't',
             "ingredients_text_fr": 'test',
             "url": 'test',
             "image_url": 'test'
@@ -176,10 +176,10 @@ class QueryTestCase(TestCase):
         assert save_counter == counter + 1
 
     def test_save_2(self):
-        category = 'user_test'
+        category = 'cat_test'
         aliment = {
             "product_name_fr": 'another_test',
-            "nutrition_grade_fr": 'test',
+            "nutrition_grade_fr": 't',
             "ingredients_text_fr": 'test',
             "url": 'test',
             "image_url": 'test'

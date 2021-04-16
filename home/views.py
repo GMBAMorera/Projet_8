@@ -14,20 +14,20 @@ def home(request, nomatch=False):
 def search(request):
     if request.method == 'POST':
         query = Search(request.POST['search'], request.user)
-        if query.matching_query is not None and len(query.substitutes) != 0:
+        if len(query.substitutes) != 0:
             # If there is acceptable result
             results = list(zip(query.substitutes, query.are_saved, query.all_url))
-            print("aliment category: ", query.matching_query.cat_name)
             return render(request, 'search.html', {
+                'user': request.user,
                 'results': results,
                 'aliment': query.matching_query
             })
-        elif len(query.substitutes) == 0:
+        elif query.matching_query is None:
+            return redirect('nomatch', nomatch='True')
+        else:
             # An aliment is found, but no aliment with better nutriscore
             url = quote_plus(query.matching_query.name)
             return redirect('nosubst', name=url, nomatch='True')
-        elif query.matching_query is None:
-            return redirect('nomatch', nomatch='True')
 
 def select(request):
     if request.method == 'POST':
