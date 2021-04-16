@@ -4,6 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+psycopg2 = "*"
+requests = "*"
+coverage = "*"
+selenium = "*"
+gunicorn = "*"
+django-heroku = "*"
+Django = "*"
 
 [dev-packages]
 
