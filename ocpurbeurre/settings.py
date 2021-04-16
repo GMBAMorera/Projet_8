@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'ocpurbeurre.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'PUR_BEURRE',
+        'NAME': os.environ['db_name'],
         'USER': os.environ['db_user'],
         'PASSWORD': os.environ['db_password'],
         'HOST': '127.0.0.1',
