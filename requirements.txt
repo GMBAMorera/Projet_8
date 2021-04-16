@@ -1,7 +1,0 @@
-django
-psycopg2
-requests
-coverage
-selenium
-gunicorn
-django-heroku
