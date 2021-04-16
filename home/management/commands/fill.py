@@ -13,24 +13,15 @@ class Command(BaseCommand):
         pass
 
     def handle(self, *args, **options):
-        self.all_aliments = self._table_list(Aliment)
-        self.all_categories = self._table_list(Category)
         self._verify_basic_categories()
 
         self.add_aliments()
 
-    def _table_list(self, Table):
-        """ return a list of row names inside a table."""
-        return [a.name for a in Table.objects.all()]
-
-    def _verify_basic_categories(self, test=None):
+    def _verify_basic_categories(self):
         """ Verify if all basic categories are inside the Category table."""
-        if test is not None:
-            self.all_categories = test
         for cat in CATEGORIES:
-            if cat not in self.all_categories:
+            if not Category.objects.filter(name=cat).exists():
                 self.add_category(cat)
-        self.all_categories = self._table_list(Category)
 
     def add_category(self, cat):
         new_cat = Category(name=cat)
@@ -40,14 +31,14 @@ class Command(BaseCommand):
         """ Find enough data inside OpenFoodFact API
         to feed the Aliment table.
         """
-        for cat in self.all_categories:
-            print(CAT_SEARCH.format(cat))
+        for cat in Category.objects.all():
+            print(CAT_SEARCH.format(cat.name))
             n_page = 1
             counter = 0
             while counter < MAX_PRODUCTS_KEEPED:
-                imported_aliments = self._scratch_category(cat, n_page)
+                imported_aliments = self._scratch_category(cat.name, n_page)
                 if not imported_aliments:
-                    print(CAT_FINDING_FAIL.format(counter, cat))
+                    print(CAT_FINDING_FAIL.format(counter, cat.name))
                     break
 
                 for aliment in imported_aliments:
@@ -87,16 +78,15 @@ class Command(BaseCommand):
                 return True
         return False
 
-    def _redundant_info(self, aliment, category, test=None):
-        if test is not None:
-            self.all_aliments = test
+    def _redundant_info(self, aliment, category):
         name = aliment['product_name_fr']
         ingredient = aliment['ingredients_text_fr']
         url = aliment['url']
         img = aliment['image_url']
+        already_exists = Aliment.objects.filter(name__iexact=name).exists()
         if (
-            name == category
-            or name in self.all_aliments
+            name == category.name
+            or already_exists
             or ingredient == ''
             or len(name) > 255
             or len(url) > 255
@@ -110,10 +100,9 @@ class Command(BaseCommand):
             name=aliment['product_name_fr'],
             nutriscore=aliment['nutrition_grade_fr'],
             ingredients = aliment['ingredients_text_fr'],
-            cat_name=Category.objects.get(name=category),
+            cat_name=category,
             link= aliment['url'],
             image = aliment['image_url']
         )
         new_aliment.save()
-        self.all_aliments = self._table_list(Aliment)
         return counter + 1

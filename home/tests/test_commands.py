@@ -26,8 +26,6 @@ class QueryTestCase(TestCase):
         self.subst_test = Substitution.objects.create(user=self.user_test, substitute=self.substitut_test, original=self.aliment_test)
         self.subst_test.save()
 
-    def test_table_list(self):
-        assert self.cat_test.name in fill.Command()._table_list(Category)
 
     def test_add_categories(self):
         fill.Command().add_category("another_cat_test")
@@ -35,7 +33,7 @@ class QueryTestCase(TestCase):
         assert test_add.exists()
 
     def test_verify_basic_categories(self):
-        fill.Command()._verify_basic_categories(test=[])
+        fill.Command()._verify_basic_categories()
         test_verify = Category.objects.filter(name="pizzas")
         assert test_verify.exists()
 
@@ -95,18 +93,16 @@ class QueryTestCase(TestCase):
         assert fill.Command()._no_full_info(aliment) == True
 
     def test_redundant_info_1(self):
-        category = 'test'
         aliment = {
-            "product_name_fr": 'test',
+            "product_name_fr": 'cat_test',
             "nutrition_grade_fr": 't',
             "ingredients_text_fr": 'test',
             "url": 'test',
             "image_url": 'test'
         }
-        assert fill.Command()._redundant_info(aliment, category, test=[]) == True
+        assert fill.Command()._redundant_info(aliment, self.cat_test) == True
 
     def test_redundant_info_2(self):
-        category = 'test'
         aliment = {
             "product_name_fr": 'another_test'*255,
             "nutrition_grade_fr": 't',
@@ -114,10 +110,9 @@ class QueryTestCase(TestCase):
             "url": 'test',
             "image_url": 'test'
         }
-        assert fill.Command()._redundant_info(aliment, category, test=[]) == True
+        assert fill.Command()._redundant_info(aliment, self.cat_test) == True
 
     def test_redundant_info_3(self):
-        category = 'test'
         aliment = {
             "product_name_fr": 'another_test',
             "nutrition_grade_fr": 't',
@@ -125,10 +120,9 @@ class QueryTestCase(TestCase):
             "url": 'test'*255,
             "image_url": 'test'
         }
-        assert fill.Command()._redundant_info(aliment, category, test=[]) == True
+        assert fill.Command()._redundant_info(aliment, self.cat_test) == True
 
     def test_redundant_info_4(self):
-        category = 'test'
         aliment = {
             "product_name_fr": 'another_test',
             "nutrition_grade_fr": 't',
@@ -136,12 +130,11 @@ class QueryTestCase(TestCase):
             "url": 'test',
             "image_url": 'test'*255
         }
-        assert fill.Command()._redundant_info(aliment, category, test=[]) == True
+        assert fill.Command()._redundant_info(aliment, self.cat_test) == True
 
     def test_redundant_info_5(self):
         al = Aliment.objects.create(name='another_test', nutriscore='f', cat_name=self.cat_test, link='', image='')
         al.save()
-        category = 'test'
         aliment = {
             "product_name_fr": 'another_test',
             "nutrition_grade_fr": 't',
@@ -149,10 +142,9 @@ class QueryTestCase(TestCase):
             "url": 'test',
             "image_url": 'test'
         }
-        assert fill.Command()._redundant_info(aliment, category, test=[]) == True
+        assert fill.Command()._redundant_info(aliment, self.cat_test) == True
 
     def test_redundant_info_6(self):
-        category = 'test'
         aliment = {
             "product_name_fr": 'another_test',
             "nutrition_grade_fr": 't',
@@ -160,10 +152,9 @@ class QueryTestCase(TestCase):
             "url": 'test',
             "image_url": 'test'
         }
-        assert fill.Command()._redundant_info(aliment, category, test=[]) == False
+        assert fill.Command()._redundant_info(aliment, self.cat_test) == False
 
     def test_save_1(self):
-        category = 'cat_test'
         aliment = {
             "product_name_fr": 'another_test',
             "nutrition_grade_fr": 't',
@@ -172,11 +163,10 @@ class QueryTestCase(TestCase):
             "image_url": 'test'
         }
         counter = 0
-        save_counter = fill.Command()._save(aliment, category, counter)
+        save_counter = fill.Command()._save(aliment, self.cat_test, counter)
         assert save_counter == counter + 1
 
     def test_save_2(self):
-        category = 'cat_test'
         aliment = {
             "product_name_fr": 'another_test',
             "nutrition_grade_fr": 't',
@@ -185,7 +175,7 @@ class QueryTestCase(TestCase):
             "image_url": 'test'
         }
         counter = 0
-        _ = fill.Command()._save(aliment, category, counter)
+        _ = fill.Command()._save(aliment, self.cat_test, counter)
 
         test_save = Aliment.objects.get(name='another_test')
         test_save = {
