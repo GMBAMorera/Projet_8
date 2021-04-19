@@ -59,6 +59,6 @@ def favorites(request):
         all_fav, all_url = find_favorites(user)
         all_fav = list(zip(all_fav, all_url))
         return render(request, 'favorites.html',
-            {'all_fav': all_fav, 'user': user})*
+            {'all_fav': all_fav, 'user': user})
     else:
         redirect('home')
