@@ -61,4 +61,4 @@ def favorites(request):
         return render(request, 'favorites.html',
             {'all_fav': all_fav, 'user': user})
     else:
-        redirect('home')
+        return redirect('home')
