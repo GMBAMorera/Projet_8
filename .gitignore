@@ -128,4 +128,4 @@ dmypy.json
 .pyre/
 
 # Credential
-cred.py
+production.py

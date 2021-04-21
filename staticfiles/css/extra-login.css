@@ -1,0 +1,17 @@
+#logo{
+  width: 50px;
+}
+
+
+.list{
+  list-style: none;
+}
+
+.text-input{
+  width: 100px;
+}
+
+#login-masthead{
+  height: 400px;
+  min-height: 0;
+}

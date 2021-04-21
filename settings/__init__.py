@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
-import django_heroku
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +26,7 @@ SECRET_KEY = os.environ['secret_key']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['142.93.232.237']
 
 
 # Application definition
@@ -79,7 +77,14 @@ WSGI_APPLICATION = 'ocpurbeurre.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600, ssl_require=False)
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ocpurbeurre',
+        'USER': 'georges',
+        'PASSWORD': '8&4Douze!',
+        'HOST': 'localhost',
+        'PORT': '5432'
+        }
 }
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
@@ -124,5 +129,3 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = "staticfiles"
 
-# Activate Django-Heroku.
-django_heroku.settings(locals())
