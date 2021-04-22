@@ -18,7 +18,7 @@
                     {% if incomplete_login %}
                     <p class="text-white-75 font-weight-light mb-5">Les informations que vous nous avez fournis ne correspondent à aucun compte.</p>
                     {% endif %}
-                    <form class="form-inline my-2 my-lg-0" id="Search" method="post" action="login">
+                    <form class="form-inline my-2 my-lg-0" id="Search" method="post" action="{% url 'login' %}">
                         {% csrf_token %}
                         <ul class="list">
                             <li><input class="form-control text-input" type="text" placeholder="username" aria-label="username" name="username"></li>
@@ -26,7 +26,7 @@
                             <li><input type="submit" id="submit"></li>
                         </ul>
                     </form>
-                    <a href="inscription" id="inscription">Pas encore inscrit?</a>
+                    <a href="{% url 'inscription' %}" id="inscription">Pas encore inscrit?</a>
                 </div>
             </div>
         </div>

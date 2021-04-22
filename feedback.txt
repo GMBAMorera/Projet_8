@@ -1,0 +1,4 @@
+* Bugs: recherche /home/search
+* Bugs: page aliment/home
+* lien vers github dans le document
+* Plan de test à rajouter

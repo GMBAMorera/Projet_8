@@ -18,7 +18,7 @@
                     {% if incomplete_inscription %}
                         <p class="text-white-75 font-weight-light mb-5">Merci de bien vouloir remplir tous les champs.</p>
                     {% endif %}
-                    <form class="form-inline my-2 my-lg-0" id="Search" method="post" action="inscription">
+                    <form class="form-inline my-2 my-lg-0" id="Search" method="post" action="{% url 'inscription' %}">
                         {% csrf_token %}
                         <ul class="list">
                             <li><input class="form-control text-input" type="text" placeholder="username" aria-label="username" name="username"></li>
@@ -27,7 +27,7 @@
                             <li><input type="submit" id="submit"></li>
                         </ul>
                     </form>
-                    <a href="login" id="login">Déjà inscrit?</a>
+                    <a href="{% url 'login' %}" id="login">Déjà inscrit?</a>
                 </div>
             </div>
         </div>

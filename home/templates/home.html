@@ -23,7 +23,7 @@
                             Nous n'avons malheureusement pas pu trouver le produit que vous cherchez.
                         {% endif %}
                     </p>
-                    <form id="search-form" method="post" action="search">
+                    <form id="search-form" method="post" action="{% url 'search' %}">
                         {% csrf_token %}
                         <input type="search" id="search" name="search" aria-label="Cherchez votre produit de substitution" placeholder="Produit">
                         <input type="submit" value="Chercher" id="submit">
