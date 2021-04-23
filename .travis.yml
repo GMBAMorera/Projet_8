@@ -4,7 +4,7 @@ python:
 
 before_script:
   - pipenv install
-  - chmod +ax manage.py
+  - chmod a+x manage.py
 
 env: DJANGO_SETTINGS_MODULE="ocpurbeurre.settings.travis"
 
