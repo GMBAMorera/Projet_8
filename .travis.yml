@@ -5,6 +5,10 @@ python:
 before_script:
   - pipenv install
   - chmod a+x manage.py
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.29.1/geckodriver-v0.29.1-linux64.tar.gz
+  - tar -xvzf geckodriver*
+  - chmod a+x geckodriver
+  - sudo mv geckodriver /usr/local/bin/
 
 env: DJANGO_SETTINGS_MODULE="ocpurbeurre.settings.travis"
 
