@@ -1,0 +1,18 @@
+language: python
+python:
+  - '3.8'
+
+before_script:
+  - pipenv install
+
+env: DJANGO_SETTINGS_MODULE="ocpurbeurre.settings"
+
+services:
+  - postgresql
+
+script:
+  - ./manage.py test
+
+branches:
+  only:
+    - Projet_10
