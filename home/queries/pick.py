@@ -3,6 +3,7 @@ from urllib.parse import unquote_plus
 
 
 def pick(name):
+    return
     name = unquote_plus(name)
     query = Aliment.objects.filter(name__iexact=name)
     return list(query)[0]
