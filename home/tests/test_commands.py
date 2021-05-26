@@ -6,7 +6,6 @@ from login.models import User
 from home.management.commands import fill
 from home.constants import CATEGORIES
 
-# Create your tests here.
 
 
 class QueryTestCase(TestCase):

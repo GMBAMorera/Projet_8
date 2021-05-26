@@ -5,6 +5,7 @@ from home.queries.search import Search
 from home.queries.select import Select
 from home.queries.pick import pick
 from home.queries.find_favorites import find_favorites
+from home.queries.check_score import check_user_score, check_mean_score, vote_for
 
 
 # Create your views here.
@@ -49,9 +50,22 @@ def unselect(request):
 
 def aliment(request, name, nosubst=False):
     picked_aliment = pick(name)
-    print(picked_aliment.link)
+    if request.user.is_authenticated:
+        user_score = check_user_score(picked_aliment, request.user)
+    else:
+        user_score = None
+    mean_score = check_mean_score(picked_aliment)
+    
     return render (request, 'aliment.html',
-        {'aliment':picked_aliment, 'bad_search': bool(nosubst)})
+        {
+            'aliment': picked_aliment,
+            'bad_search': bool(nosubst),
+            'is_auth': request.user.is_authenticated,
+            'user_score': user_score,
+            'mean_score': mean_score,
+            'range': [i+1 for i in range(5)]
+            }
+        )
 
 def favorites(request):
     user = request.user
@@ -62,3 +76,8 @@ def favorites(request):
             {'all_fav': all_fav, 'user': user})
     else:
         return redirect('home')
+
+def vote(request):
+    if request.method == 'POST':
+        vote_for(request.user, request.POST['aliment'], request.POST['score'])
+    return redirect('favorites')
