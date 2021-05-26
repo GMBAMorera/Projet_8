@@ -43,9 +43,39 @@
                     </div>
                 </div>
             </div>
+            <hr class="divider my-4" />
             <div class="row">
-                <div class="col-12">
+                <div class="col-6">
                     <a href="{{aliment.link}}">Voir la fiche OpenFoodFact</a>
+                </div>
+                <div class="col-6">
+                    {% if is_auth %}
+                    <label>
+                        {{mean_score}} Quel note donneriez-vous à ce produit : 
+                        <form action="{% url 'vote' %}" method="POST">
+                            {% csrf_token %}
+                            <div>
+                                {% for i in range %}
+                                    <label for="{{i}}">{{i}}</label>
+                                    <input type="radio" name="score" value="{{i}}" id="radio-{{i}}"
+                                    {% if user_score == i %} checked  {% endif %}>
+                                {% endfor %}
+                                <input type="hidden" name="aliment" value="{{aliment.id}}">
+
+                            <button type="submit" id="vote-button">Envoyer</button>
+                            </div>
+                        </form>
+                    </label>
+                    {% else %}
+                        <label>
+                            {{mean_score}}
+                            <form action="{% url 'login' %}">
+                                {% csrf_token %}
+                                <input type="submit" value="connectez-vous pour noter ce produit" id="login">
+                            </form>
+                        </label>
+                    {% endif %}
+
                 </div>
             </div>
         </div>

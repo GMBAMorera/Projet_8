@@ -25,3 +25,7 @@ CATEGORIES = [
 
 ### SEARCH QUERY CONSTANT ###
 MAX_SUBSTITUTES = 6
+
+### TEST_SCORE CONSTANT ###
+MEAN_VOTE = "Les utilisateurs de PurBeurre ont donnés la note moyenne de {} à ce produit."
+NO_VOTE = "soyez le premier utilisateur à noter ce produit!"

@@ -10,5 +10,6 @@ urlpatterns = [
     path('unselect', views.unselect, name='unselect'),
     path('aliment/<name>', views.aliment, name='aliment'),
     path('aliment/<name>/<nosubst>', views.aliment, name='nosubst'),
-    path('favorites', views.favorites, name="favorites")
+    path('favorites', views.favorites, name="favorites"),
+    path('vote', views.vote, name='vote')
 ]
